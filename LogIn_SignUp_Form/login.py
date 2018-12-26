@@ -8,7 +8,13 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+def signUpCheck():
+     print("Sign Up Button Clicked.")
+
 class Ui_LOGINFORM(object):
+    def loginCheck(self):
+        print("Log In Button Clicked.")
+    
     def setupUi(self, LOGINFORM):
         LOGINFORM.setObjectName("LOGINFORM")
         LOGINFORM.resize(481, 341)
@@ -72,6 +78,11 @@ class Ui_LOGINFORM(object):
         font.setWeight(75)
         self.login.setFont(font)
         self.login.setObjectName("login")
+        
+        ############## Button Event#############
+        self.login.clicked.connect(self.loginCheck)
+        ############################################
+        
         self.signUp = QtWidgets.QPushButton(LOGINFORM)
         self.signUp.setGeometry(QtCore.QRect(150, 250, 101, 31))
         font = QtGui.QFont()
@@ -81,6 +92,11 @@ class Ui_LOGINFORM(object):
         font.setWeight(75)
         self.signUp.setFont(font)
         self.signUp.setObjectName("signUp")
+
+        ############## Button Event#############
+        self.signUp.clicked.connect(signUpCheck)
+        ############################################
+        
         self.line = QtWidgets.QFrame(LOGINFORM)
         self.line.setGeometry(QtCore.QRect(60, 80, 351, 16))
         self.line.setLineWidth(2)
