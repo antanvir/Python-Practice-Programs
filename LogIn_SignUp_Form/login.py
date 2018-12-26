@@ -8,11 +8,28 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-class Ui_Dialog(object):
-    def setupUi(self, Dialog):
-        Dialog.setObjectName("Dialog")
-        Dialog.resize(481, 341)
-        self.log_form = QtWidgets.QLabel(Dialog)
+class Ui_LOGINFORM(object):
+    def setupUi(self, LOGINFORM):
+        LOGINFORM.setObjectName("LOGINFORM")
+        LOGINFORM.resize(481, 341)
+        LOGINFORM.setStyleSheet("QDialog{\n"
+"    background-color:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0             rgba(154, 189, 149, 255), stop:1 rgba(255, 255, 255, 255));\n"
+"}\n"
+"\n"
+"QLineEdit{\n"
+"    background-color:rgb(239, 239, 179)\n"
+"}\n"
+"QPushButton#login{\n"
+"    background-color:rgb(0, 186, 0);\n"
+"    border:none;\n"
+"    color:rgb(0, 0, 67);\n"
+"}\n"
+"QPushButton#signUp{\n"
+"    background-color:rgb(245, 0, 0);\n"
+"    border:none;\n"
+"    color:rgb(226, 226, 0)\n"
+"}")
+        self.log_form = QtWidgets.QLabel(LOGINFORM)
         self.log_form.setGeometry(QtCore.QRect(150, 30, 151, 41))
         font = QtGui.QFont()
         font.setFamily("Tahoma")
@@ -21,7 +38,7 @@ class Ui_Dialog(object):
         font.setWeight(75)
         self.log_form.setFont(font)
         self.log_form.setObjectName("log_form")
-        self.u_name = QtWidgets.QLabel(Dialog)
+        self.u_name = QtWidgets.QLabel(LOGINFORM)
         self.u_name.setGeometry(QtCore.QRect(60, 120, 81, 21))
         font = QtGui.QFont()
         font.setPointSize(11)
@@ -29,21 +46,24 @@ class Ui_Dialog(object):
         font.setWeight(50)
         self.u_name.setFont(font)
         self.u_name.setObjectName("u_name")
-        self.pass1 = QtWidgets.QLabel(Dialog)
-        self.pass1.setGeometry(QtCore.QRect(60, 180, 81, 21))
+        self.pass = QtWidgets.QLabel(LOGINFORM)
+        self.pass.setGeometry(QtCore.QRect(60, 180, 81, 21))
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(False)
         font.setWeight(50)
-        self.pass1.setFont(font)
-        self.pass1.setObjectName("pass")
-        self.text_u_name = QtWidgets.QLineEdit(Dialog)
+        self.pass.setFont(font)
+        self.pass.setObjectName("pass")
+        self.text_u_name = QtWidgets.QLineEdit(LOGINFORM)
         self.text_u_name.setGeometry(QtCore.QRect(150, 120, 261, 31))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.text_u_name.setFont(font)
         self.text_u_name.setObjectName("text_u_name")
-        self.text_pass = QtWidgets.QLineEdit(Dialog)
+        self.text_pass = QtWidgets.QLineEdit(LOGINFORM)
         self.text_pass.setGeometry(QtCore.QRect(150, 170, 261, 31))
         self.text_pass.setObjectName("text_pass")
-        self.login = QtWidgets.QPushButton(Dialog)
+        self.login = QtWidgets.QPushButton(LOGINFORM)
         self.login.setGeometry(QtCore.QRect(310, 250, 101, 31))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -52,7 +72,7 @@ class Ui_Dialog(object):
         font.setWeight(75)
         self.login.setFont(font)
         self.login.setObjectName("login")
-        self.signUp = QtWidgets.QPushButton(Dialog)
+        self.signUp = QtWidgets.QPushButton(LOGINFORM)
         self.signUp.setGeometry(QtCore.QRect(150, 250, 101, 31))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
@@ -61,32 +81,32 @@ class Ui_Dialog(object):
         font.setWeight(75)
         self.signUp.setFont(font)
         self.signUp.setObjectName("signUp")
-        self.line = QtWidgets.QFrame(Dialog)
+        self.line = QtWidgets.QFrame(LOGINFORM)
         self.line.setGeometry(QtCore.QRect(60, 80, 351, 16))
         self.line.setLineWidth(2)
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
 
-        self.retranslateUi(Dialog)
-        QtCore.QMetaObject.connectSlotsByName(Dialog)
+        self.retranslateUi(LOGINFORM)
+        QtCore.QMetaObject.connectSlotsByName(LOGINFORM)
 
-    def retranslateUi(self, Dialog):
+    def retranslateUi(self, LOGINFORM):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "LOG IN FORM"))
-        self.log_form.setText(_translate("Dialog", "Log In Form"))
-        self.u_name.setText(_translate("Dialog", "Username"))
-        self.pass1.setText(_translate("Dialog", "Password"))
-        self.login.setText(_translate("Dialog", "LogIn"))
-        self.signUp.setText(_translate("Dialog", "Sign Up"))
+        LOGINFORM.setWindowTitle(_translate("LOGINFORM", "Dialog"))
+        self.log_form.setText(_translate("LOGINFORM", "Log In Form"))
+        self.u_name.setText(_translate("LOGINFORM", "Username"))
+        self.pass.setText(_translate("LOGINFORM", "Password"))
+        self.login.setText(_translate("LOGINFORM", "LogIn"))
+        self.signUp.setText(_translate("LOGINFORM", "Sign Up"))
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    Dialog = QtWidgets.QDialog()
-    ui = Ui_Dialog()
-    ui.setupUi(Dialog)
-    Dialog.show()
+    LOGINFORM = QtWidgets.QDialog()
+    ui = Ui_LOGINFORM()
+    ui.setupUi(LOGINFORM)
+    LOGINFORM.show()
     sys.exit(app.exec_())
 
