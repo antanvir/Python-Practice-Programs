@@ -8,7 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from signup import Ui_SIGNUPFORM
-#import signup as file
+import mysql.connector
 
 
 
@@ -20,7 +20,7 @@ class Ui_LOGINFORM(object):
         messageBox.setIcon(QtWidgets.QMessageBox.Information)
         messageBox.setWindowTitle(msgType)
         messageBox.setText(message)
-        messageBox.setStandardButtons(QtWidgets.QMessageBox.Ok | QtWidgets.QMessageBox.Close)
+        messageBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
         messageBox.exec_()
 
     def signUpCheck(self):
@@ -32,7 +32,28 @@ class Ui_LOGINFORM(object):
 
     def loginCheck(self):
         print("Log In Button Clicked.")
-        self.showMessage("Information", 'Successfully logged in :)')
+        uname = self.text_u_name.text()
+        upass = self.text_pass.text()
+        print(uname, " ", upass)
+
+        mydb = mysql.connector.connect(
+            host='localhost',
+            user="root",
+            passwd="ant904",
+            database="loginDB"
+            # auth_plugin='mysql_native_password'
+        )
+        myCursor = mydb.cursor()
+        sql = "SELECT * FROM Users WHERE Username = %s AND Password = %s"
+        val = (uname, upass)
+        myCursor.execute(sql, val)
+        myresult = myCursor.fetchall()
+        
+        if myCursor.rowcount > 0:
+            self.showMessage("Information", 'Log in successful.\nYou\'re welcome.')
+        else:
+            self.showMessage("Information", 'You have either no account or entered wrong info.\n \
+            Sign up if required or try again.')
 
     def setupUi(self, LOGINFORM):
         LOGINFORM.setObjectName("LOGINFORM")

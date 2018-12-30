@@ -7,8 +7,61 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import mysql.connector
 
 class Ui_SIGNUPFORM(object):
+
+    def showMessage(self, msgType, message):
+        messageBox = QtWidgets.QMessageBox()
+        messageBox.setIcon(QtWidgets.QMessageBox.Warning)
+        messageBox.setWindowTitle(msgType)
+        messageBox.setText(message)
+        messageBox.setStandardButtons(QtWidgets.QMessageBox.Retry | QtWidgets.QMessageBox.Close)
+        messageBox.exec_()
+        
+    def infoInsertion(self):
+
+        fname = self.text_u_name.text()
+        uname = self.text_pass.text()
+        mail = self.text_u_name_2.text()
+        upass = self.text_pass_2.text()
+        cpass = self.text_u_name_3.text()
+
+        print(upass, " ", cpass)
+
+        if upass == cpass:
+            mydb = mysql.connector.connect(
+                host = 'localhost',
+                user = "root",
+                passwd = "ant904",
+                database = "loginDB"
+                #auth_plugin='mysql_native_password'
+                )
+            myCursor = mydb.cursor()
+
+            '''fname = self.text_u_name.text()
+            uname = self.text_pass.text()
+            mail = self.text_u_name_2.text()
+            upass = self.text_pass_2.text()'''
+        
+            sql = "INSERT INTO Users(name, Username, Email, Password) VALUES(%s, %s, %s, %s)"
+            val = (fname, uname, mail, upass) 
+
+            myCursor.execute(sql, val)
+            mydb.commit()
+            myCursor.close()
+            mydb.close()
+            ##
+            messageBox = QtWidgets.QMessageBox()
+            messageBox.setIcon(QtWidgets.QMessageBox.Information)
+            messageBox.setWindowTitle("Account Creation")
+            messageBox.setText("Sign Up completed!\nUse username & password to log in.")
+            messageBox.setStandardButtons(QtWidgets.QMessageBox.Ok | QtWidgets.QMessageBox.Close)
+            messageBox.exec_()
+            
+        else:
+            self.showMessage("Retry", 'Password mismatched!\nTry again.')
+        
     def setupUi(self, SIGNUPFORM):
         SIGNUPFORM.setObjectName("SIGNUPFORM")
         SIGNUPFORM.resize(480, 441)
@@ -33,14 +86,14 @@ class Ui_SIGNUPFORM(object):
         font.setWeight(50)
         self.u_name.setFont(font)
         self.u_name.setObjectName("u_name")
-        self.pass2 = QtWidgets.QLabel(SIGNUPFORM)
-        self.pass2.setGeometry(QtCore.QRect(40, 160, 111, 21))
+        self.nm2 = QtWidgets.QLabel(SIGNUPFORM)
+        self.nm2.setGeometry(QtCore.QRect(40, 160, 111, 21))
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(False)
         font.setWeight(50)
-        self.pass2.setFont(font)
-        self.pass2.setObjectName("pass")
+        self.nm2.setFont(font)
+        self.nm2.setObjectName("pass")
         self.text_pass = QtWidgets.QLineEdit(SIGNUPFORM)
         self.text_pass.setGeometry(QtCore.QRect(170, 160, 261, 31))
         self.text_pass.setObjectName("text_pass")
@@ -86,6 +139,21 @@ class Ui_SIGNUPFORM(object):
         font.setWeight(75)
         self.signUp.setFont(font)
         self.signUp.setObjectName("signUp")
+
+        ############## Button Event#############
+        self.signUp.clicked.connect(self.infoInsertion)
+        '''self.signUp.clicked.connect(
+            p1 = self.text_pass_2.text()
+            p2 = self.text_u_name_3.text()
+            print(p1," ", p2)
+            if p1 == p2:
+                #self.signUp.clicked.connect(self.infoInsertion)
+                print(p1," ", p2)
+            else:
+                 self.showMessage("Retry", 'Password mismatched :(\nTry again.')
+        )'''
+        ############################################
+        
         self.line = QtWidgets.QFrame(SIGNUPFORM)
         self.line.setGeometry(QtCore.QRect(40, 70, 391, 16))
         self.line.setLineWidth(2)
@@ -101,7 +169,7 @@ class Ui_SIGNUPFORM(object):
         SIGNUPFORM.setWindowTitle(_translate("SIGNUPFORM", "Dialog"))
         self.log_form.setText(_translate("SIGNUPFORM", "Sign Up Form"))
         self.u_name.setText(_translate("SIGNUPFORM", "Name"))
-        self.pass2.setText(_translate("SIGNUPFORM", "Username"))
+        self.nm2.setText(_translate("SIGNUPFORM", "Username"))
         self.u_name_2.setText(_translate("SIGNUPFORM", "Email"))
         self.pass_2.setText(_translate("SIGNUPFORM", "Password"))
         self.u_name_3.setText(_translate("SIGNUPFORM", "Confirm Password"))
