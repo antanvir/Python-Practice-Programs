@@ -1,7 +1,13 @@
 import sys
-from PyQt5 import QtGui, QtCore, QtWidgets
+from PyQt5.QtCore import QDir, Qt, QUrl
+from PyQt5 import QtGui, QtCore, QtWidgets, QtMultimedia, QtMultimediaWidgets
+from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
+from PyQt5.QtMultimediaWidgets import QVideoWidget
+from PyQt5.QtWidgets import (QApplication, QFileDialog, QHBoxLayout, QLabel,
+        QPushButton, QSizePolicy, QSlider, QStyle, QVBoxLayout, QWidget)
+
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QPushButton
-from PyQt5.QtGui import QIcon, QPixmap, QImage, QImageReader
+from PyQt5.QtGui import QIcon, QPixmap, QImage, QImageReader, QLayout
 from PyQt5.QtWidgets import QVBoxLayout
 import mysql.connector
 #from PyQt5.QtCore import pyqtSlot
@@ -120,14 +126,65 @@ class App(QWidget):
         self.title = 'Learning Though Images'
         self.left = 200
         self.top = 150
-        self.width = 680
-        self.height = 480
+        self.width = 1200#680
+        self.height = 800#480
         
         self.initUI()
  
     def initUI(self):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
+        
+    #=========================================Video Part===============================================#
+        self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
+        
+        videoWidget = QVideoWidget()
+
+        self.playButton = QPushButton()
+        self.playButton.setEnabled(False)
+        self.playButton.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
+        self.playButton.clicked.connect(self.play)
+
+        self.positionSlider = QSlider(Qt.Horizontal)
+        self.positionSlider.setRange(0, 0)
+        self.positionSlider.sliderMoved.connect(self.setPosition)
+
+        self.errorLabel = QLabel()
+        self.errorLabel.setSizePolicy(QSizePolicy.Preferred,
+                QSizePolicy.Maximum)
+
+        
+        self.mediaPlayer.setMedia(
+                    QMediaContent(QUrl.fromLocalFile
+                                  ("F:\StudyMaterials\Python Exercises\Videos\ARBOVIRUS__HARIYE_JAO.mp4")))
+        self.playButton.setEnabled(True)
+           
+        # Create a widget for window contents
+        mainlayout = QLayout(self)
+        self.setLayout(mainlayout)
+        
+        # Create layouts to place inside widget
+        controlLayout = QHBoxLayout()
+        controlLayout.setContentsMargins(650, 20, 0, 0)
+        controlLayout.addWidget(self.playButton)
+        controlLayout.addWidget(self.positionSlider)
+
+        layout = QVBoxLayout()
+        layout.addWidget(videoWidget)
+        layout.addLayout(controlLayout)
+        layout.addWidget(self.errorLabel)
+
+        # Set widget to contain window contents
+        mainlayout.setLayout(layout)
+
+        self.mediaPlayer.setVideoOutput(videoWidget)
+        self.mediaPlayer.stateChanged.connect(self.mediaStateChanged)
+        self.mediaPlayer.positionChanged.connect(self.positionChanged)
+        self.mediaPlayer.durationChanged.connect(self.durationChanged)
+        self.mediaPlayer.error.connect(self.handleError)
+
+
+    #=====================================================================================#
         
     # Image  widget
         self.label = QLabel(self)
@@ -150,6 +207,37 @@ class App(QWidget):
         self.buttonN.clicked.connect(self.on_click_next)
      
         self.show()
+
+
+    def exitCall(self):
+        sys.exit(app.exec_())
+
+    def play(self):
+        if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
+            self.mediaPlayer.pause()
+        else:
+            self.mediaPlayer.play()
+
+    def mediaStateChanged(self, state):
+        if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
+            self.playButton.setIcon(
+                    self.style().standardIcon(QStyle.SP_MediaPause))
+        else:
+            self.playButton.setIcon(
+                    self.style().standardIcon(QStyle.SP_MediaPlay))
+
+    def positionChanged(self, position):
+        self.positionSlider.setValue(position)
+
+    def durationChanged(self, duration):
+        self.positionSlider.setRange(0, duration)
+
+    def setPosition(self, position):
+        self.mediaPlayer.setPosition(position)
+
+    def handleError(self):
+        self.playButton.setEnabled(False)
+        self.errorLabel.setText("Error: " + self.mediaPlayer.errorString())
 
           
         
